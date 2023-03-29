@@ -11,11 +11,8 @@ public class InvoiceGenerator {
 
     public InvoiceSummary getInvoiceSummary(String userID) {
         Ride[] rides = userRides.get(userID);
-        double totalFare = 0;
-        for (Ride ride : rides) {
-            totalFare += this.calculateFare(ride.distance, ride.time);
-        }
-        return new InvoiceSummary(rides.length, totalFare);
+        InvoiceSummary invoiceSummary = new InvoiceGenerator().calculateFare(rides);
+        return invoiceSummary;
     }
 
     public double calculateFare(double distance, int time) {
@@ -34,4 +31,14 @@ public class InvoiceGenerator {
     public void addRides(String userID, Ride[] rides) {
         userRides.put(userID, rides);
     }
+
+    public InvoiceSummary getInvoiceSummaryPremium(String userID) {
+        Ride[] rides = userRides.get(userID);
+        double totalFare = 0;
+        for (Ride ride : rides) {
+            totalFare += ride.calculateCategoryFare(ride.category, ride.distance, ride.time);
+        }
+        return new InvoiceSummary(rides.length, totalFare);
+    }
+
 }
